@@ -1,0 +1,11 @@
+.Pencil  {
+    width: 20px;
+    height: 20px;
+}
+.Del  {
+    width: 20px;
+    height: 20px;
+}
+.DelButton {
+    background:white;
+}
