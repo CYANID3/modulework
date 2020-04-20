@@ -1,28 +1,37 @@
-import React, { Component } from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {Route, Switch} from "react-router-dom";
-import Layout from "./components/Layout/Layout";
+import Frontend from "./containers/Frontend/Frontend";
+import Dashboard from "./containers/Dashboard/Dashboard";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import Login from "./components/Login/Login";
+import {useDispatch, useSelector} from "react-redux";
+import Layout from "./components/Layout/Layout"
 
-import Diary from './containers/Diary/Diary';
-import Add from './containers/Add/Add';
-import News from './containers/News/News';
-import Edit from './components/DiaryEdit/DiaryEdit';
-import Contacts from './containers/Contacts/Contacts';
+import 'semantic-ui-css/semantic.min.css'
+import {authCheck} from "./store/actions/authAction";
 
+import './App.css';
 
-export class App extends Component {
-  render() {
-    return (
-      <Layout>
-      <Switch>
-          <Route path="/" exact component={Diary}/>
-          <Route path="/news" component={News}/>
-          <Route path="/add" component={Add}/>
-          <Route path="/edit/:id" component={Edit}/>
-          <Route path="/contacts" component={Contacts}/>
-      </Switch>
-      </Layout>
-    );
-  }
+function App() {
+  const dispatch = useDispatch();
+  const {isAuth} = useSelector(state => (state.auth));
+
+  useEffect(() => {
+    dispatch(authCheck());
+  }, [dispatch, isAuth]);
+
+  return (
+      <Fragment>
+
+        <Switch>
+          <Layout>
+            <Route exact path="/" component={Frontend}/>
+            <Route exact path="/login" component={Login}/>
+          <PrivateRoute path="/dashboard" component={Dashboard} isAuth={isAuth}/>
+          </Layout>
+        </Switch>
+      </Fragment>
+  );
 }
 
-export default App
+export default App;
